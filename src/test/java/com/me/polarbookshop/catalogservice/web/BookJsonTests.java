@@ -22,7 +22,7 @@ public class BookJsonTests {
 
     @Test
     void testSerialize() throws IOException {
-        Book book = new Book("1234567890", "Title", "Author", 9.99);
+        Book book = Book.of("1234567890", "Title", "Author", 9.99);
 
         var jsonContent = json.write(book);
         assertThat(jsonContent)
