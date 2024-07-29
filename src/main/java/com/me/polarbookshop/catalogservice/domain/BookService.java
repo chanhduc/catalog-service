@@ -27,24 +27,28 @@ public class BookService {
     }
 
     public Book addBookToCatalog(Book book) throws BookAlreadyExistsException {
-       if (bookRepository.existsByIsbc(book.isbn())) {
+       if (bookRepository.existsByIsbn(book.isbn())) {
            throw new BookAlreadyExistsException(book.isbn());
        }
         return bookRepository.save(book);
     }
 
     public void removeBookFromCatalog(String isbn) {
-        bookRepository.deleteById(isbn);
+        bookRepository.deleteByIsbn(isbn);
     }
 
     public Book editBookDetails(String isbn, Book book) throws BookNotFoundException {
         return bookRepository.findByIsbn(isbn)
                 .map(existingBook -> {
                     var updateBook = new Book(
+                            existingBook.id(),
+                            existingBook.version(),
                             existingBook.isbn(),
                             book.title(),
                             book.author(),
-                            book.price()
+                            book.price(),
+                            existingBook.createdDate(),
+                            existingBook.lastModifiedDate()
                     );
                     return bookRepository.save(updateBook);
                 })
