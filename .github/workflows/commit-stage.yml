@@ -72,7 +72,7 @@ jobs:
             fail-build: false
             severity-cutoff: high
         - name: Verify SARIF file
-          run: cat ${{ steps.scan.outputs.sarif }}
+          run: echo ${{ steps.scan.outputs.sarif }} ; cat ${{ steps.scan.outputs.sarif }}
         - name: Upload vulnerability report
           uses: github/codeql-action/upload-sarif@v3
           if: success() || failure()
