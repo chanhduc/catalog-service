@@ -1,9 +1,6 @@
 package com.me.polarbookshop.catalogservice.domain;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import org.springframework.data.annotation.*;
 
 import java.time.Instant;
@@ -25,14 +22,19 @@ public record Book(
         String isbn,
 
         @NotBlank(message = "The book title must not be blank.")
+                @Size(max = 255, message = "The book title must be less than 256 characters.")
         String title,
 
         @NotBlank(message = "The book author must not be blank.")
+        @Size(max= 255, message = "The book author must be less than 256 characters.")
         String author,
 
         @NotNull(message = "The book price must not be null.")
         @Positive(message = "The book price must be greater than zero.")
         Double price,
+
+        @Size(max = 255, message = "The book publisher must be less than 256 characters.")
+        String publisher,
 
         @CreatedDate
         Instant createdDate,
@@ -41,6 +43,6 @@ public record Book(
         Instant lastModifiedDate
 ) {
         public static Book of(String isbn, String title, String author, double price) {
-                return new Book(null,0, isbn, title, author, price,null,null);
+                return new Book(null,0, isbn, title, author, price,null,null,null);
         }
 }
