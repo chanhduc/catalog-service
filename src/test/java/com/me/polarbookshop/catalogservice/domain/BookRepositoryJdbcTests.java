@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.jdbc.core.JdbcAggregateTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -21,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
         replace = AutoConfigureTestDatabase.Replace.NONE
 )
 @ActiveProfiles("integration")
+@Profile("integration")
 public class BookRepositoryJdbcTests {
 
     @Autowired
@@ -32,15 +34,15 @@ public class BookRepositoryJdbcTests {
     @Test
     void findBookByIsbnWhenExisiting() {
         // Given
-        String bookisbn = "1234567890";
+        String bookisbn = "1234567870";
         var book = Book.of(bookisbn, "Title 1", "Author 1", 9.99);
         jdbcAggregateTemplate.insert(book);
 
         // When
-        var foundBook = bookRepository.findByIsbn("1234567890");
+        var foundBook = bookRepository.findByIsbn("1234567870");
 
         // Then
         assertThat(foundBook).isPresent();
-        assertThat(foundBook.get().isbn()).isEqualTo("1234567890");
+        assertThat(foundBook.get().isbn()).isEqualTo("1234567870");
     }
 }
