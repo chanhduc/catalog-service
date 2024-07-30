@@ -65,12 +65,17 @@ jobs:
             chmod +x gradlew
             ./gradlew bootBuildImage \
               --imageName=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+        - name: Check image created successfully
+          run: docker images
         - name: OCI image vulnerability scanning
           uses: anchore/scan-action@v3
           with:
             image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
             fail-build: true
             severity-cutoff: high
+        - name: Check Scan Status
+          if: steps.scan.conclusion == 'success'
+          run: echo "Scan completed successfully"
         - name: Verify SARIF file
           run: echo ${{ steps.scan.outputs.sarif }} ; cat ${{ steps.scan.outputs.sarif }}
         - name: Upload vulnerability report
