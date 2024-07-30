@@ -22,7 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
         replace = AutoConfigureTestDatabase.Replace.NONE
 )
 @ActiveProfiles("integration")
-@Profile("integration")
 public class BookRepositoryJdbcTests {
 
     @Autowired
