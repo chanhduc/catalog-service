@@ -1,4 +1,5 @@
 import org.gradle.internal.classpath.Instrumented.systemProperty
+import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 import org.springframework.boot.gradle.tasks.run.BootRun
 
 plugins {
@@ -39,6 +40,8 @@ dependencies {
     implementation("org.springframework.retry:spring-retry")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
+    implementation("org.flywaydb:flyway-core")
+    implementation("org.flywaydb:flyway-database-postgresql")
 
     runtimeOnly("org.postgresql:postgresql")
 
@@ -65,4 +68,17 @@ tasks.withType<Test> {
 
 tasks.withType<BootRun> {
     systemProperty("spring.profiles.active", "testdata")
+}
+
+tasks.withType<BootBuildImage> {
+    imageName = project.name
+    environment = mapOf("BP_JVM_VERSION" to "17.*")
+
+    docker {
+        publishRegistry {
+            username.set(project.findProperty("registryUsername") as String?)
+            password.set( project.findProperty("registryPassword") as String?)
+            url.set(project.findProperty("registryUrl") as String?)
+        }
+    }
 }
