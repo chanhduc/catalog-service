@@ -40,6 +40,11 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew build
+      - name: Validate Kubernetes manifests
+        uses: azure/k8s-lint@v1
+        with:
+          manifests: k8s/*.yml
+          kubeconformOpts: -summary
   package:
     name: Package and Publish
     # Run this job only when the main branch is pushed
